@@ -1,0 +1,438 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>批量渲染 | Roadinforest的blog</title><meta name="keywords" content="OpenGL"><meta name="author" content="Rif"><meta name="copyright" content="Rif"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="批量渲染"><meta name="application-name" content="批量渲染"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="批量渲染"><meta property="og:url" content="http://example.com/2025/07/11/OpenGL/Cherno%E6%95%99%E7%A8%8B/%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93/index.html"><meta property="og:site_name" content="Roadinforest的blog"><meta property="og:description" content="学习笔记：OpenGL 批量渲染 (Batch Rendering)1. 核心概念：什么是批量渲染？批量渲染是一种优化技术，其核心思想是将大量独立的、小型的绘制调用 (Draw Call) 合并成少数几个、大型的绘制调用。  问题场景: 想象一下，你要渲染一个由 10,000 个独立的方块（比如粒子"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="http://example.com/img/default_cover.jpg"><meta property="article:author" content="Rif"><meta property="article:tag" content="“sports” &quot;badminton&quot;"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://example.com/img/default_cover.jpg"><meta name="description" content="学习笔记：OpenGL 批量渲染 (Batch Rendering)1. 核心概念：什么是批量渲染？批量渲染是一种优化技术，其核心思想是将大量独立的、小型的绘制调用 (Draw Call) 合并成少数几个、大型的绘制调用。  问题场景: 想象一下，你要渲染一个由 10,000 个独立的方块（比如粒子"><link rel="shortcut icon" href="/img/webIcon/kitty.png"><link rel="canonical" href="http://example.com/2025/07/11/OpenGL/Cherno%E6%95%99%E7%A8%8B/%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: undefined,
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Rif","link":"链接: ","source":"来源: Roadinforest的blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Roadinforest的blog',
+  title: '批量渲染',
+  postAI: '',
+  pageFillDescription: '学习笔记：OpenGL 批量渲染 (Batch Rendering), 1. 核心概念：什么是批量渲染？, 2. 批量渲染的策略, 3. 动态批量渲染的具体实现 (以 2D 四边形为例), 步骤 1 定义顶点结构, 步骤 2 初始化渲染器, 步骤 3 帧的开始和结束, 步骤 4 提供绘制接口, 步骤 5 着色器修改, 4. 优缺点总结学习笔记批量渲染核心概念什么是批量渲染批量渲染是一种优化技术其核心思想是将大量独立的小型的绘制调用合并成少数几个大型的绘制调用问题场景想象一下你要渲染一个由个独立的方块比如粒子瓦片元素组成的场景朴素方法对每个方块都进行一次完整的渲染流程这将产生次绘制调用批量渲染方法将这个方块的顶点数据打包到一个巨大的中然后用一次调用将它们全部绘制出来为什么绘制调用很昂贵每一次调用都需要向发送指令这个过程涉及到驱动程序的介入状态验证上下文切换等开销当绘制调用非常频繁时每秒数千甚至数万次会把大量时间花在准备发号施令上而不是让去专心干活这会导致瓶颈严重影响性能批量渲染的目标最大限度地减少与的通信次数让能够一次性处理大量数据充分发挥其并行计算的优势批量渲染的策略根据渲染物体的不同批量渲染有多种实现策略关键在于找到可以批量处理的共同点静态批量处理适用场景大量静态的不会移动使用相同材质和纹理的物体比如场景中的石头树木建筑方法在程序加载时将所有这些物体的顶点数据已经过模型变换合并到一个巨大的和中渲染时只需一次绘制调用即可优点性能极高运行时开销几乎为零缺点完全不灵活物体无法移动或改变动态批量处理适用场景大量动态的每帧都可能改变位置颜色但使用相同着色器和纹理的物体比如游戏中的粒子精灵瓦片地图方法创建一个足够大的动态设为在每一帧清空或重置这个遍历所有需要绘制的物体将其顶点数据动态地填充到这个大中在这一帧的末尾用一次绘制调用渲染整个优点非常灵活完美支持动态物体缺点每帧都需要在端准备数据并上传到有一定的和数据传输开销这是教程中重点讲解的方法实例化渲染适用场景渲染大量几何形状完全相同但位置旋转颜色等属性不同的物体比如草地森林人群方法只上传一个物体的模型数据创建一个额外的用于存储每个实例的逐实例属性如变换矩阵颜色使用一次性绘制会自动为每个实例应用其独特的属性优点极高的性能和灵活性数据传输量最小缺点所有实例必须共享完全相同的网格动态批量渲染的具体实现以四边形为例这是教程中的核心实践我们将构建一个可以批量渲染大量不同位置颜色纹理的四边形的系统步骤定义顶点结构我们需要一个来清晰地定义单个顶点的所有属性关键用于在着色器中选择纹理这个浮点数将告诉片段着色器这个顶点属于哪个纹理步骤初始化渲染器在渲染器的构造函数中我们需要设置一个巨大的空的动态的在端分配一个大数组创建空的动态设置顶点布局生成索引缓冲这部分数据是固定的可以一次性生成我们用创建并预分配足够大的空间的模式是固定的所以可以一次性生成步骤帧的开始和结束我们需要方法来开始一个新的批次和结束并提交一个批次重置指向缓冲区的指针重置索引计数号槽留给白色纹理计算这一帧填充了多少数据将缓冲区的数据上传到的动态中函数执行绘制绑定所有使用的纹理绑定和着色器执行一次绘制调用负责重置状态负责将这一帧积累的所有顶点数据一次性通过上传到比更适合更新缓冲区的一部分性能更好负责执行真正的绘制调用步骤提供绘制接口我们需要提供简单的接口让上层代码可以方便地请求绘制一个四边形如果缓冲区满了就先提交一次代表纯色使用白色纹理计算四边形的四个顶点并填充到缓冲区中填充另外个顶点带纹理的版本检查缓冲区是否已满查找这个纹理是否已经在本批次中被绑定如果没找到就把它添加到下一个可用的纹理槽填充四个顶点的数据这次是算出来的核心逻辑是不直接调用而是将顶点数据写入一个端的巨大数组负责计算和填充数据并递增指针和索引计数当批次中使用的纹理超过可用纹理单元时也需要步骤着色器修改片段着色器需要能够根据从不同的纹理采样器中选择声明一个采样器数组是一个采样器数组它的值需要由端的一个循环来设置优缺点总结优点大幅提升性能将数千次绘制调用减少到几次极大地降低了开销适用于大量相似物体对粒子系统游戏等场景效果拔群缺点实现复杂需要精心设计数据结构渲染器状态管理限制同一个批次中的所有物体通常必须使用同一个着色器同一个混合模式同一个坐标系或者在着色器中处理变换内存开销需要预先分配一个巨大的可能会造成内存浪费批量渲染是游戏和图形应用性能优化的一个关键技术虽然实现起来有一定挑战但带来的性能提升是巨大的掌握它是从能画出东西到能高效地画出大量东西的重要一步',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-07-11 10:46:46',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/webIcon/pet.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Roadinforest的blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 1.05rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 1.05rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 1.05rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 1.05rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 1.05rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">45</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">6</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"><a class="article-meta__tags" href="/tags/OpenGL/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>OpenGL</span></a></span></div></div><h1 class="post-title" itemprop="name headline">批量渲染</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-07-10T16:00:00.000Z" title="发表于 2025-07-11 00:00:00">2025-07-11</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-07-11T02:46:46.410Z" title="更新于 2025-07-11 10:46:46">2025-07-11</time></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/07/11/OpenGL/Cherno%E6%95%99%E7%A8%8B/%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93/"><header><a href="/tags/OpenGL/" tabindex="-1" itemprop="url">OpenGL</a><h1 id="CrawlerTitle" itemprop="name headline">批量渲染</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Rif</span><time itemprop="dateCreated datePublished" datetime="2025-07-10T16:00:00.000Z" title="发表于 2025-07-11 00:00:00">2025-07-11</time><time itemprop="dateCreated datePublished" datetime="2025-07-11T02:46:46.410Z" title="更新于 2025-07-11 10:46:46">2025-07-11</time></header><h3 id="学习笔记：OpenGL-批量渲染-Batch-Rendering"><a href="#学习笔记：OpenGL-批量渲染-Batch-Rendering" class="headerlink" title="学习笔记：OpenGL 批量渲染 (Batch Rendering)"></a><strong>学习笔记：OpenGL 批量渲染 (Batch Rendering)</strong></h3><h4 id="1-核心概念：什么是批量渲染？"><a href="#1-核心概念：什么是批量渲染？" class="headerlink" title="1. 核心概念：什么是批量渲染？"></a>1. 核心概念：什么是批量渲染？</h4><p><strong>批量渲染</strong>是一种优化技术，其核心思想是<strong>将大量独立的、小型的绘制调用 (Draw Call) 合并成少数几个、大型的绘制调用</strong>。</p>
+<ul>
+<li><strong>问题场景</strong>: 想象一下，你要渲染一个由 10,000 个独立的方块（比如粒子、瓦片、UI 元素）组成的场景。<ul>
+<li><strong>朴素方法</strong>: 对每个方块都进行一次完整的渲染流程：<code>Bind VAO -&gt; Bind Shader -&gt; Set Uniforms -&gt; glDrawElements(...)</code>。这将产生 10,000 次绘制调用。</li>
+<li><strong>批量渲染方法</strong>: 将这 10,000 个方块的顶点数据<strong>打包</strong>到一个巨大的 VBO 中，然后用<strong>一次</strong> <code>glDrawElements</code> 调用将它们全部绘制出来。</li>
+</ul>
+</li>
+</ul>
+<p><strong>为什么绘制调用 (Draw Call) 很昂贵？</strong><br>每一次 <code>glDraw...</code> 调用，CPU 都需要向 GPU 发送指令。这个过程涉及到驱动程序的介入、状态验证、上下文切换等开销。当绘制调用非常频繁时（每秒数千甚至数万次），CPU 会把大量时间花在“准备发号施令”上，而不是让 GPU 去“专心干活”，这会导致 **CPU 瓶颈 (CPU-bound)**，严重影响性能。</p>
+<p><strong>批量渲染的目标</strong>：最大限度地减少 CPU 与 GPU 的通信次数，让 GPU 能够一次性处理大量数据，充分发挥其并行计算的优势。</p>
+<hr>
+<h4 id="2-批量渲染的策略"><a href="#2-批量渲染的策略" class="headerlink" title="2. 批量渲染的策略"></a>2. 批量渲染的策略</h4><p>根据渲染物体的不同，批量渲染有多种实现策略。关键在于找到可以“批量处理”的共同点。</p>
+<ul>
+<li><p><strong>静态批量处理 (Static Batching)</strong>:</p>
+<ul>
+<li><strong>适用场景</strong>: 大量<strong>静态的、不会移动、使用相同材质和纹理</strong>的物体（比如场景中的石头、树木、建筑）。</li>
+<li><strong>方法</strong>: 在<strong>程序加载时</strong>，将所有这些物体的顶点数据（已经过模型变换）合并到一个巨大的 VBO 和 IBO 中。渲染时，只需一次绘制调用即可。</li>
+<li><strong>优点</strong>: 性能极高，运行时开销几乎为零。</li>
+<li><strong>缺点</strong>: 完全不灵活，物体无法移动或改变。</li>
+</ul>
+</li>
+<li><p><strong>动态批量处理 (Dynamic Batching)</strong>:</p>
+<ul>
+<li><strong>适用场景</strong>: 大量<strong>动态的、每帧都可能改变位置&#x2F;颜色&#x2F;UV，但使用相同着色器和纹理</strong>的物体（比如 2D 游戏中的粒子、精灵、瓦片地图）。</li>
+<li><strong>方法</strong>:<ol>
+<li>创建一个足够大的<strong>动态 VBO</strong> (<code>usage</code> 设为 <code>GL_DYNAMIC_DRAW</code>)。</li>
+<li>在<strong>每一帧</strong>，清空或重置这个 VBO。</li>
+<li>遍历所有需要绘制的物体，将其顶点数据<strong>动态地填充</strong>到这个大 VBO 中。</li>
+<li>在这一帧的末尾，用一次绘制调用渲染整个 VBO。</li>
+</ol>
+</li>
+<li><strong>优点</strong>: 非常灵活，完美支持动态物体。</li>
+<li><strong>缺点</strong>: 每帧都需要在 CPU 端准备数据并上传到 GPU，有一定的 CPU 和数据传输开销。这是 Cherno 教程中重点讲解的方法。</li>
+</ul>
+</li>
+<li><p><strong>实例化渲染 (Instanced Rendering)</strong>:</p>
+<ul>
+<li><strong>适用场景</strong>: 渲染大量<strong>几何形状完全相同，但位置、旋转、颜色等属性不同</strong>的物体（比如草地、森林、人群）。</li>
+<li><strong>方法</strong>:<ol>
+<li>只上传<strong>一个</strong>物体的模型数据（VBO&#x2F;IBO）。</li>
+<li>创建一个额外的 VBO，用于存储每个实例的<strong>“逐实例属性”</strong>（如变换矩阵、颜色）。</li>
+<li>使用 <code>glDrawElementsInstanced(...)</code> 一次性绘制，GPU 会自动为每个实例应用其独特的属性。</li>
+</ol>
+</li>
+<li><strong>优点</strong>: 极高的性能和灵活性，数据传输量最小。</li>
+<li><strong>缺点</strong>: 所有实例必须共享完全相同的网格。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-动态批量渲染的具体实现-以-2D-四边形为例"><a href="#3-动态批量渲染的具体实现-以-2D-四边形为例" class="headerlink" title="3. 动态批量渲染的具体实现 (以 2D 四边形为例)"></a>3. 动态批量渲染的具体实现 (以 2D 四边形为例)</h4><p>这是 Cherno 教程中的核心实践。我们将构建一个可以批量渲染大量不同位置、颜色、纹理的 2D 四边形（Quad）的系统。</p>
+<h5 id="步骤-1-定义顶点结构"><a href="#步骤-1-定义顶点结构" class="headerlink" title="步骤 1: 定义顶点结构"></a><strong>步骤 1: 定义顶点结构</strong></h5><p>我们需要一个 <code>struct</code> 来清晰地定义单个顶点的所有属性。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">QuadVertex</span></span><br><span class="line">&#123;</span><br><span class="line">    glm::vec3 Position;</span><br><span class="line">    glm::vec4 Color;</span><br><span class="line">    glm::vec2 TexCoord;</span><br><span class="line">    <span class="type">float</span> TexIndex; <span class="comment">// 关键！用于在着色器中选择纹理</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>TexIndex</code>: 这个浮点数将告诉片段着色器，这个顶点属于哪个纹理。</li>
+</ul>
+<h5 id="步骤-2-初始化渲染器"><a href="#步骤-2-初始化渲染器" class="headerlink" title="步骤 2: 初始化渲染器"></a><strong>步骤 2: 初始化渲染器</strong></h5><p>在渲染器的构造函数中，我们需要设置一个巨大的、空的、动态的 VBO。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BatchRenderer2D.cpp</span></span><br><span class="line"><span class="type">const</span> <span class="type">size_t</span> MaxQuadCount = <span class="number">10000</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">size_t</span> MaxVertexCount = MaxQuadCount * <span class="number">4</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">size_t</span> MaxIndexCount = MaxQuadCount * <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">BatchRenderer2D::<span class="built_in">BatchRenderer2D</span>()</span><br><span class="line">&#123;</span><br><span class="line">    m_QuadVertexBuffer = <span class="keyword">new</span> QuadVertex[MaxVertexCount]; <span class="comment">// 在CPU端分配一个大数组</span></span><br><span class="line"></span><br><span class="line">    m_QuadVAO = <span class="keyword">new</span> <span class="built_in">VertexArray</span>();</span><br><span class="line">    m_QuadVBO = <span class="keyword">new</span> <span class="built_in">VertexBuffer</span>(MaxVertexCount * <span class="built_in">sizeof</span>(QuadVertex), GL_DYNAMIC_DRAW); <span class="comment">// 创建空的动态VBO</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置顶点布局</span></span><br><span class="line">    VertexBufferLayout layout;</span><br><span class="line">    layout.<span class="built_in">Push</span>&lt;<span class="type">float</span>&gt;(<span class="number">3</span>); <span class="comment">// Position</span></span><br><span class="line">    layout.<span class="built_in">Push</span>&lt;<span class="type">float</span>&gt;(<span class="number">4</span>); <span class="comment">// Color</span></span><br><span class="line">    layout.<span class="built_in">Push</span>&lt;<span class="type">float</span>&gt;(<span class="number">2</span>); <span class="comment">// TexCoord</span></span><br><span class="line">    layout.<span class="built_in">Push</span>&lt;<span class="type">float</span>&gt;(<span class="number">1</span>); <span class="comment">// TexIndex</span></span><br><span class="line">    m_QuadVAO-&gt;<span class="built_in">AddBuffer</span>(*m_QuadVBO, layout);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生成索引缓冲 (这部分数据是固定的，可以一次性生成)</span></span><br><span class="line">    <span class="type">uint32_t</span> indices[MaxIndexCount];</span><br><span class="line">    <span class="type">uint32_t</span> offset = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; MaxIndexCount; i += <span class="number">6</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        indices[i + <span class="number">0</span>] = offset + <span class="number">0</span>;</span><br><span class="line">        indices[i + <span class="number">1</span>] = offset + <span class="number">1</span>;</span><br><span class="line">        indices[i + <span class="number">2</span>] = offset + <span class="number">2</span>;</span><br><span class="line">        indices[i + <span class="number">3</span>] = offset + <span class="number">2</span>;</span><br><span class="line">        indices[i + <span class="number">4</span>] = offset + <span class="number">3</span>;</span><br><span class="line">        indices[i + <span class="number">5</span>] = offset + <span class="number">0</span>;</span><br><span class="line">        offset += <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    m_QuadIBO = <span class="keyword">new</span> <span class="built_in">IndexBuffer</span>(indices, MaxIndexCount);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们用 <code>GL_DYNAMIC_DRAW</code> 创建 VBO，并预分配足够大的空间。</li>
+<li>IBO 的模式是固定的 (<code>0,1,2, 2,3,0</code>, <code>4,5,6, 6,7,4</code>, …)，所以可以一次性生成。</li>
+</ul>
+<h5 id="步骤-3-帧的开始和结束"><a href="#步骤-3-帧的开始和结束" class="headerlink" title="步骤 3: 帧的开始和结束"></a><strong>步骤 3: 帧的开始和结束</strong></h5><p>我们需要方法来开始一个新的批次和结束（并提交）一个批次。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BatchRenderer2D.cpp</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BatchRenderer2D::BeginScene</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    m_QuadVertexBufferPtr = m_QuadVertexBuffer; <span class="comment">// 重置指向CPU缓冲区的指针</span></span><br><span class="line">    m_IndexCount = <span class="number">0</span>; <span class="comment">// 重置索引计数</span></span><br><span class="line">    m_TextureSlotIndex = <span class="number">1</span>; <span class="comment">// 0号槽留给白色纹理</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BatchRenderer2D::EndScene</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 计算这一帧填充了多少数据</span></span><br><span class="line">    GLsizeiptr size = (<span class="type">uint8_t</span>*)m_QuadVertexBufferPtr - (<span class="type">uint8_t</span>*)m_QuadVertexBuffer;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 将CPU缓冲区的数据上传到GPU的动态VBO中</span></span><br><span class="line">    m_QuadVBO-&gt;<span class="built_in">Bind</span>();</span><br><span class="line">    <span class="built_in">glBufferSubData</span>(GL_ARRAY_BUFFER, <span class="number">0</span>, size, m_QuadVertexBuffer);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Flush</span>(); <span class="comment">// Flush 函数执行绘制</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BatchRenderer2D::Flush</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 绑定所有使用的纹理</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">uint32_t</span> i = <span class="number">0</span>; i &lt; m_TextureSlotIndex; i++)</span><br><span class="line">        m_TextureSlots[i]-&gt;<span class="built_in">Bind</span>(i);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定VAO和着色器</span></span><br><span class="line">    m_Shader-&gt;<span class="built_in">Bind</span>();</span><br><span class="line">    m_QuadVAO-&gt;<span class="built_in">Bind</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 执行一次绘制调用</span></span><br><span class="line">    <span class="built_in">glDrawElements</span>(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, <span class="literal">nullptr</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>BeginScene</code> 负责重置状态。</li>
+<li><code>EndScene</code> 负责将这一帧积累的所有顶点数据<strong>一次性</strong>通过 <code>glBufferSubData</code> 上传到 GPU。<code>glBufferSubData</code> 比 <code>glBufferData</code> 更适合更新缓冲区的一部分，性能更好。</li>
+<li><code>Flush</code> 负责执行真正的绘制调用。</li>
+</ul>
+<h5 id="步骤-4-提供绘制接口"><a href="#步骤-4-提供绘制接口" class="headerlink" title="步骤 4: 提供绘制接口"></a><strong>步骤 4: 提供绘制接口</strong></h5><p>我们需要提供简单的接口，让上层代码可以方便地“请求”绘制一个四边形。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BatchRenderer2D.cpp</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BatchRenderer2D::DrawQuad</span><span class="params">(<span class="type">const</span> glm::vec2&amp; position, <span class="type">const</span> glm::vec2&amp; size, <span class="type">const</span> glm::vec4&amp; color)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 如果缓冲区满了，就先提交一次</span></span><br><span class="line">    <span class="keyword">if</span> (m_IndexCount &gt;= MaxIndexCount)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">EndScene</span>();</span><br><span class="line">        <span class="built_in">BeginScene</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> textureIndex = <span class="number">0.0f</span>; <span class="comment">// 0.0f 代表纯色（使用白色纹理）</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算四边形的四个顶点，并填充到 CPU 缓冲区中</span></span><br><span class="line">    m_QuadVertexBufferPtr-&gt;Position = &#123; position.x, position.y, <span class="number">0.0f</span> &#125;;</span><br><span class="line">    m_QuadVertexBufferPtr-&gt;Color = color;</span><br><span class="line">    m_QuadVertexBufferPtr-&gt;TexCoord = &#123; <span class="number">0.0f</span>, <span class="number">0.0f</span> &#125;;</span><br><span class="line">    m_QuadVertexBufferPtr-&gt;TexIndex = textureIndex;</span><br><span class="line">    m_QuadVertexBufferPtr++;</span><br><span class="line">    <span class="comment">// ... 填充另外3个顶点 ...</span></span><br><span class="line"></span><br><span class="line">    m_IndexCount += <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 带纹理的版本</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BatchRenderer2D::DrawQuad</span><span class="params">(<span class="type">const</span> glm::vec2&amp; position, <span class="type">const</span> glm::vec2&amp; size, <span class="type">const</span> std::shared_ptr&lt;Texture&gt;&amp; texture)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// ... 检查缓冲区是否已满 ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找这个纹理是否已经在本批次中被绑定</span></span><br><span class="line">    <span class="type">float</span> textureIndex = <span class="number">0.0f</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">uint32_t</span> i = <span class="number">1</span>; i &lt; m_TextureSlotIndex; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (*m_TextureSlots[i].<span class="built_in">get</span>() == *texture.<span class="built_in">get</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            textureIndex = (<span class="type">float</span>)i;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果没找到，就把它添加到下一个可用的纹理槽</span></span><br><span class="line">    <span class="keyword">if</span> (textureIndex == <span class="number">0.0f</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        textureIndex = (<span class="type">float</span>)m_TextureSlotIndex;</span><br><span class="line">        m_TextureSlots[m_TextureSlotIndex] = texture;</span><br><span class="line">        m_TextureSlotIndex++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... 填充四个顶点的数据，这次 TexIndex 是算出来的 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>核心逻辑是：不直接调用 OpenGL API，而是将顶点数据<strong>写入一个 CPU 端的巨大数组</strong> (<code>m_QuadVertexBuffer</code>)。</li>
+<li><code>DrawQuad</code> 负责计算和填充数据，并递增指针和索引计数。</li>
+<li>当批次中使用的纹理超过可用纹理单元时，也需要 <code>Flush</code>。</li>
+</ul>
+<h5 id="步骤-5-着色器修改"><a href="#步骤-5-着色器修改" class="headerlink" title="步骤 5: 着色器修改"></a><strong>步骤 5: 着色器修改</strong></h5><p>片段着色器需要能够根据 <code>TexIndex</code> 从不同的纹理采样器中选择。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fragment shader</span></span><br><span class="line"><span class="meta">#version 330 core</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">in vec4 v_Color;</span><br><span class="line">in vec2 v_TexCoord;</span><br><span class="line">in <span class="type">float</span> v_TexIndex;</span><br><span class="line"></span><br><span class="line">uniform sampler2D u_Textures[<span class="number">32</span>]; <span class="comment">// 声明一个采样器数组</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> index = <span class="type">int</span>(v_TexIndex);</span><br><span class="line">    vec4 texColor = texture(u_Textures[index], v_TexCoord);</span><br><span class="line">    color = texColor * v_Color;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>u_Textures</code> 是一个采样器数组，它的值需要由 CPU 端的一个循环来设置 <code>glUniform1iv</code>。</li>
+</ul>
+<hr>
+<h4 id="4-优缺点总结"><a href="#4-优缺点总结" class="headerlink" title="4. 优缺点总结"></a>4. 优缺点总结</h4><ul>
+<li><p><strong>优点</strong>:</p>
+<ul>
+<li><strong>大幅提升性能</strong>: 将数千次绘制调用减少到几次，极大地降低了 CPU 开销。</li>
+<li><strong>适用于大量相似物体</strong>: 对粒子系统、2D 游戏、UI 等场景效果拔群。</li>
+</ul>
+</li>
+<li><p><strong>缺点</strong>:</p>
+<ul>
+<li><strong>实现复杂</strong>: 需要精心设计数据结构、渲染器状态管理。</li>
+<li><strong>限制</strong>: 同一个批次中的所有物体通常必须使用<strong>同一个着色器</strong>、<strong>同一个混合模式</strong>、<strong>同一个坐标系</strong>（或者在着色器中处理变换）。</li>
+<li><strong>内存开销</strong>: 需要预先分配一个巨大的 VBO，可能会造成内存浪费。</li>
+</ul>
+</li>
+</ul>
+<p>批量渲染是游戏和图形应用性能优化的一个关键技术，虽然实现起来有一定挑战，但带来的性能提升是巨大的。掌握它，是从“能画出东西”到“能高效地画出大量东西”的重要一步。</p>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">还在建设中哦，嗯~ o(*￣▽￣*)o</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Rif</h1><div class="author-info__desc">理想偏执狂</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/Roadinforest" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AOpenGL-%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93-Batch-Rendering"><span class="toc-number">1.</span> <span class="toc-text">学习笔记：OpenGL 批量渲染 (Batch Rendering)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1. 核心概念：什么是批量渲染？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93%E7%9A%84%E7%AD%96%E7%95%A5"><span class="toc-number">1.2.</span> <span class="toc-text">2. 批量渲染的策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%8A%A8%E6%80%81%E6%89%B9%E9%87%8F%E6%B8%B2%E6%9F%93%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0-%E4%BB%A5-2D-%E5%9B%9B%E8%BE%B9%E5%BD%A2%E4%B8%BA%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">3. 动态批量渲染的具体实现 (以 2D 四边形为例)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1-%E5%AE%9A%E4%B9%89%E9%A1%B6%E7%82%B9%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.1.</span> <span class="toc-text">步骤 1: 定义顶点结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">步骤 2: 初始化渲染器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-3-%E5%B8%A7%E7%9A%84%E5%BC%80%E5%A7%8B%E5%92%8C%E7%BB%93%E6%9D%9F"><span class="toc-number">1.3.3.</span> <span class="toc-text">步骤 3: 帧的开始和结束</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-4-%E6%8F%90%E4%BE%9B%E7%BB%98%E5%88%B6%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.3.4.</span> <span class="toc-text">步骤 4: 提供绘制接口</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-5-%E7%9D%80%E8%89%B2%E5%99%A8%E4%BF%AE%E6%94%B9"><span class="toc-number">1.3.5.</span> <span class="toc-text">步骤 5: 着色器修改</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BC%98%E7%BC%BA%E7%82%B9%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">4. 优缺点总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B/" title="创建型-综合案例">创建型-综合案例</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-AbstractFactory/" title="创建型-综合题-AbstractFactory">创建型-综合题-AbstractFactory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Factory/" title="创建型-综合题-Factory">创建型-综合题-Factory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Builder/" title="创建型-综合题-Builder">创建型-综合题-Builder</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Prototype/" title="创建型-综合题-Prototype">创建型-综合题-Prototype</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="Rif" target="_blank">Rif</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 0.88rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 0.88rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 0.88rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 0.88rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 0.88rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="5275233928" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("08/17/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.12",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Rif 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

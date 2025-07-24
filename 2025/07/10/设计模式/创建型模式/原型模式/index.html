@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>原型模式 | Roadinforest的blog</title><meta name="keywords" content="设计模式"><meta name="author" content="Rif"><meta name="copyright" content="Rif"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="原型模式"><meta name="application-name" content="原型模式"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="原型模式"><meta property="og:url" content="http://example.com/2025/07/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/index.html"><meta property="og:site_name" content="Roadinforest的blog"><meta property="og:description" content="设计模式笔记：原型模式 (Prototype Pattern)一、一句话概括通过复制一个已经存在的实例（原型）来创建新的对象，而无需关心创建的细节。简单说，就是 “别用 new 了，用 clone() 吧”。 二、为什么需要它 (Why - The Pain Point)在软件开发中，我们常常会遇到"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="http://example.com/img/default_cover.jpg"><meta property="article:author" content="Rif"><meta property="article:tag" content="“sports” &quot;badminton&quot;"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://example.com/img/default_cover.jpg"><meta name="description" content="设计模式笔记：原型模式 (Prototype Pattern)一、一句话概括通过复制一个已经存在的实例（原型）来创建新的对象，而无需关心创建的细节。简单说，就是 “别用 new 了，用 clone() 吧”。 二、为什么需要它 (Why - The Pain Point)在软件开发中，我们常常会遇到"><link rel="shortcut icon" href="/img/webIcon/kitty.png"><link rel="canonical" href="http://example.com/2025/07/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: undefined,
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Rif","link":"链接: ","source":"来源: Roadinforest的blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Roadinforest的blog',
+  title: '原型模式',
+  postAI: '',
+  pageFillDescription: '设计模式笔记：原型模式 (Prototype Pattern), 一、一句话概括, 二、为什么需要它 (Why - The Pain Point), 三、它是什么 (What - The Solution), 四、怎么做 (How - The Blueprint), 五、UML 类图, 六、优缺点分析, 七、在 Java 中的应用设计模式笔记原型模式一一句话概括通过复制一个已经存在的实例原型来创建新的对象而无需关心创建的细节简单说就是别用了用吧二为什么需要它在软件开发中我们常常会遇到以下痛点创建成本高昂一个对象的初始化过程可能非常复杂和耗时例如需要查询数据库进行调用读取大文件进行复杂的计算等如果需要频繁创建这类对象系统的性能会受到严重影响避免与具体类耦合假设你正在开发一个框架它需要能创建和处理用户提供的各种对象你的框架代码不应该硬编码具体的用户类名例如否则框架的通用性就无从谈起简化对象状态的复制当需要一个与现有对象状态完全相同或大部分相同的新对象时从头开始设置所有属性会非常繁琐直接复制一个现有对象的状态会便捷得多核心问题如何高效灵活地创建复杂对象同时又不让创建过程与系统的其他部分紧密耦合三它是什么原型模式提供了一种优雅的解决方案克隆它将创建新对象的过程从传统的构造函数逐步构建转变为从一个原型对象拷贝这个原型对象就像一个模板后续所有的新对象都是它的一个副本核心思想原型接口定义一个用于克隆自身的接口在中语言层面已经提供了标记接口和类中的方法具体原型实现克隆接口的类它负责实现具体的克隆逻辑客户端客户端不通过来创建对象而是获取一个原型实例然后调用其克隆方法来得到新的实例背景对比关键点与的联系这个模式的思想与中的拷贝构造函数和拷贝赋值运算符非常相似都是为了复制一个已存在的对象的实现机制这是一个标记接口它本身没有任何方法一个类实现这个接口只是为了在运行时告诉这个类的对象是可以被克隆的如果没有实现它而直接调用方法会抛出这是所有对象的根类提供的方法它是一个方法执行的是浅拷贝要使用它我们必须在自己的类中实现接口重写方法并将其访问修饰符改为以便外部调用深度剖析浅拷贝深拷贝这是原型模式中最关键也最容易出错的地方浅拷贝的默认行为对于值类型如和不可变引用类型如会复制其值对于可变引用类型如自定义对象只会复制引用地址而不会复制引用所指向的对象这意味着克隆后的对象和原型对象将共享同一个内部对象修改任何一方的共享对象另一方也会受到影响深拷贝不仅复制对象本身还会递归地复制其内部所有可变引用类型的成员对象克隆后的对象和原型对象是完全独立的互不影响要实现深拷贝你需要在重写的方法中对所有可变引用类型的成员也手动调用它们的方法四怎么做基本步骤创建一个抽象类或接口作为所有原型的基类让它实现接口在该基类中重写方法创建具体的原型类继承或实现上述基类接口如果存在可变引用类型的成员变量务必在方法中实现深拷贝逻辑可选但推荐创建一个原型管理器用于存储和管理一系列原型对象客户端通过一个键来获取原型并克隆示例代码包含浅拷贝与深拷贝的对比为了演示深拷贝我们创建一个可变对象也需要能被克隆抽象原型类实现可变引用类型成员重写方法浅拷贝深拷贝先进行基本浅拷贝再对可变对象进行拷贝具体原型类原型管理器推荐实践返回的是原型的一个克隆而不是原型本身预加载原型到缓存中客户端代码从缓存中获取克隆对象证明是不同实例演示深拷贝效果修改第一个克隆车的引擎类型如果是浅拷贝上面的输出会显示的引擎也变成了并且的比较会是如果是深拷贝则不会影响的比较会是五类图下面是上述例子的代码标记接口可变成员对象抽象原型引用可变对象具体原型原型管理器客户端关系图示解读实现了接口和继承自包含一个对象聚合关系缓存了的原型实例并根据请求克隆它们六优缺点分析优点性能提升当创建新对象的代价时间资源很大时原型模式通过复制来避免这些开销性能极佳简化创建过程客户端无需知道复杂的创建细节只需调用即可增加动态性可以在运行时动态地添加或删除原型从而改变应用的行为客户端可以克隆一个在运行时才决定的对象减少子类与工厂方法模式相比在某些场景下可以避免创建与产品类平行的工厂类层次结构缺点克隆的复杂性实现深拷贝可能非常复杂需要对类中所有的可变引用成员进行递归克隆容易出错对现有类的改造每个需要支持克隆的类都必须实现接口并重写方法这可能对已有的类层次结构造成侵入方法的约定问题中的实现机制本身存在一些争议例如它与字段的交互不佳有些开发者如作者建议优先使用拷贝构造函数或静态工厂方法来替代七在中的应用的方法是一个非常典型的浅拷贝实现当你克隆一个时新列表和旧列表的容量大小都一样但它们内部存储的对象引用是相同的和的方法许多框架在需要动态创建和配置对象时会采用原型模式的思想即使不直接使用方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-07-15 20:32:17',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/webIcon/pet.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Roadinforest的blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 1.05rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 1.05rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 1.05rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 1.05rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 1.05rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">45</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">6</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>设计模式</span></a></span></div></div><h1 class="post-title" itemprop="name headline">原型模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-07-09T16:00:00.000Z" title="发表于 2025-07-10 00:00:00">2025-07-10</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-07-15T12:32:17.937Z" title="更新于 2025-07-15 20:32:17">2025-07-15</time></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/07/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><header><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" tabindex="-1" itemprop="url">设计模式</a><h1 id="CrawlerTitle" itemprop="name headline">原型模式</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Rif</span><time itemprop="dateCreated datePublished" datetime="2025-07-09T16:00:00.000Z" title="发表于 2025-07-10 00:00:00">2025-07-10</time><time itemprop="dateCreated datePublished" datetime="2025-07-15T12:32:17.937Z" title="更新于 2025-07-15 20:32:17">2025-07-15</time></header><h3 id="设计模式笔记：原型模式-Prototype-Pattern"><a href="#设计模式笔记：原型模式-Prototype-Pattern" class="headerlink" title="设计模式笔记：原型模式 (Prototype Pattern)"></a><strong>设计模式笔记：原型模式 (Prototype Pattern)</strong></h3><h4 id="一、一句话概括"><a href="#一、一句话概括" class="headerlink" title="一、一句话概括"></a><strong>一、一句话概括</strong></h4><p>通过复制一个已经存在的实例（原型）来创建新的对象，而无需关心创建的细节。简单说，就是 <strong>“别用 <code>new</code> 了，用 <code>clone()</code> 吧”</strong>。</p>
+<h4 id="二、为什么需要它-Why-The-Pain-Point"><a href="#二、为什么需要它-Why-The-Pain-Point" class="headerlink" title="二、为什么需要它 (Why - The Pain Point)"></a><strong>二、为什么需要它 (Why - The Pain Point)</strong></h4><p>在软件开发中，我们常常会遇到以下痛点：</p>
+<ol>
+<li><strong>创建成本高昂</strong>：一个对象的初始化过程可能非常复杂和耗时。例如，需要查询数据库、进行RPC调用、读取大文件、进行复杂的计算等。如果需要频繁创建这类对象，系统的性能会受到严重影响。</li>
+<li><strong>避免与具体类耦合</strong>：假设你正在开发一个框架，它需要能创建和处理用户提供的各种对象。你的框架代码不应该硬编码具体的用户类名（例如 <code>new UserDefinedClass()</code>），否则框架的通用性就无从谈起。</li>
+<li><strong>简化对象状态的复制</strong>：当需要一个与现有对象状态完全相同或大部分相同的新对象时，从头开始设置所有属性会非常繁琐。直接复制一个现有对象的状态会便捷得多。</li>
+</ol>
+<p><strong>核心问题</strong>：如何高效、灵活地创建复杂对象，同时又不让创建过程与系统的其他部分紧密耦合？</p>
+<h4 id="三、它是什么-What-The-Solution"><a href="#三、它是什么-What-The-Solution" class="headerlink" title="三、它是什么 (What - The Solution)"></a><strong>三、它是什么 (What - The Solution)</strong></h4><p>原型模式提供了一种优雅的解决方案：<strong>克隆</strong>。</p>
+<p>它将创建新对象的过程，从传统的“构造函数逐步构建”转变为“从一个原型对象拷贝”。这个原型对象就像一个模板，后续所有的新对象都是它的一个副本。</p>
+<p><strong>核心思想：</strong></p>
+<ol>
+<li>**原型接口 (Prototype Interface)**：定义一个用于克隆自身的接口。在 Java 中，语言层面已经提供了 <code>java.lang.Cloneable</code> 标记接口和 <code>java.lang.Object</code> 类中的 <code>clone()</code> 方法。</li>
+<li>**具体原型 (Concrete Prototype)**：实现克隆接口的类。它负责实现具体的克隆逻辑。</li>
+<li>**客户端 (Client)**：客户端不通过 <code>new</code> 来创建对象，而是获取一个原型实例，然后调用其克隆方法来得到新的实例。</li>
+</ol>
+<p><strong>C++ 背景对比 &amp; Java 关键点：</strong></p>
+<ul>
+<li><strong>与C++的联系</strong>：这个模式的思想与 C++ 中的<strong>拷贝构造函数（Copy Constructor）</strong>和<strong>拷贝赋值运算符（Copy Assignment Operator）</strong>非常相似，都是为了复制一个已存在的对象。</li>
+<li><strong>Java 的实现机制</strong>：<ul>
+<li><code>java.lang.Cloneable</code>：这是一个<strong>标记接口（Marker Interface）</strong>，它本身没有任何方法。一个类实现这个接口，只是为了在运行时告诉JVM，这个类的对象是“可以被克隆的”。如果没有实现它而直接调用 <code>clone()</code> 方法，会抛出 <code>CloneNotSupportedException</code>。</li>
+<li><code>java.lang.Object.clone()</code>：这是所有 Java 对象的根类 <code>Object</code> 提供的方法。它是一个 <code>protected</code> 方法，执行的是<strong>浅拷贝（Shallow Copy）</strong>。要使用它，我们必须在自己的类中：<ol>
+<li>实现 <code>Cloneable</code> 接口。</li>
+<li>重写 <code>clone()</code> 方法，并将其访问修饰符改为 <code>public</code>，以便外部调用。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>深度剖析：浅拷贝 (Shallow Copy) vs. 深拷贝 (Deep Copy)</strong></p>
+<p>这是原型模式中最关键、也最容易出错的地方。</p>
+<ul>
+<li><p>**浅拷贝 (Shallow Copy)**：<code>super.clone()</code> 的默认行为。</p>
+<ul>
+<li>对于值类型（如 <code>int</code>, <code>double</code>）和不可变引用类型（如 <code>String</code>），会复制其值。</li>
+<li>对于<strong>可变引用类型</strong>（如 <code>Date</code>, <code>ArrayList</code>, 自定义对象），<strong>只会复制引用地址</strong>，而不会复制引用所指向的对象。这意味着克隆后的对象和原型对象将<strong>共享</strong>同一个内部对象。修改任何一方的共享对象，另一方也会受到影响。</li>
+</ul>
+</li>
+<li><p>**深拷贝 (Deep Copy)**：</p>
+<ul>
+<li>不仅复制对象本身，还会<strong>递归地复制</strong>其内部所有可变引用类型的成员对象。</li>
+<li>克隆后的对象和原型对象是完全独立的，互不影响。</li>
+<li>要实现深拷贝，你需要在重写的 <code>clone()</code> 方法中，对所有可变引用类型的成员也手动调用它们的 <code>clone()</code> 方法。</li>
+</ul>
+</li>
+</ul>
+<h4 id="四、怎么做-How-The-Blueprint"><a href="#四、怎么做-How-The-Blueprint" class="headerlink" title="四、怎么做 (How - The Blueprint)"></a><strong>四、怎么做 (How - The Blueprint)</strong></h4><p><strong>基本步骤：</strong></p>
+<ol>
+<li>创建一个抽象类或接口，作为所有原型的基类。让它实现 <code>Cloneable</code> 接口。</li>
+<li>在该基类中，重写 <code>clone()</code> 方法。</li>
+<li>创建具体的原型类，继承或实现上述基类&#x2F;接口。</li>
+<li>如果存在可变引用类型的成员变量，务必在 <code>clone()</code> 方法中实现深拷贝逻辑。</li>
+<li>（可选但推荐）创建一个原型管理器（Registry&#x2F;Cache），用于存储和管理一系列原型对象，客户端通过一个键（key）来获取原型并克隆。</li>
+</ol>
+<p><strong>Java 示例代码 (包含浅拷贝与深拷贝的对比)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为了演示深拷贝，我们创建一个可变对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Engine</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Engine</span><span class="params">(String type)</span> &#123; <span class="built_in">this</span>.type = type; &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getType</span><span class="params">()</span> &#123; <span class="keyword">return</span> type; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setType</span><span class="params">(String type)</span> &#123; <span class="built_in">this</span>.type = type; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123; <span class="keyword">return</span> <span class="string">&quot;Engine [type=&quot;</span> + type + <span class="string">&quot;]&quot;</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Engine也需要能被克隆</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 抽象原型类，实现 Cloneable</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Vehicle</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">protected</span> String type;</span><br><span class="line">    <span class="keyword">private</span> Engine engine; <span class="comment">// 可变引用类型成员</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">drive</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getId</span><span class="params">()</span> &#123; <span class="keyword">return</span> id; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(String id)</span> &#123; <span class="built_in">this</span>.id = id; &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getType</span><span class="params">()</span> &#123; <span class="keyword">return</span> type; &#125;</span><br><span class="line">    <span class="keyword">public</span> Engine <span class="title function_">getEngine</span><span class="params">()</span> &#123; <span class="keyword">return</span> engine; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEngine</span><span class="params">(Engine engine)</span> &#123; <span class="built_in">this</span>.engine = engine; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 重写 clone 方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">clone</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">clone</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// --- 浅拷贝 ---</span></span><br><span class="line">            <span class="comment">// clone = super.clone();</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// --- 深拷贝 ---</span></span><br><span class="line">            <span class="type">Vehicle</span> <span class="variable">clonedVehicle</span> <span class="operator">=</span> (Vehicle) <span class="built_in">super</span>.clone(); <span class="comment">// 先进行基本浅拷贝</span></span><br><span class="line">            clonedVehicle.engine = (Engine) <span class="built_in">this</span>.engine.clone(); <span class="comment">// 再对可变对象进行拷贝</span></span><br><span class="line">            clone = clonedVehicle;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> clone;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 具体原型类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Car</span> <span class="keyword">extends</span> <span class="title class_">Vehicle</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Car</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.type = <span class="string">&quot;Car&quot;</span>;</span><br><span class="line">        setEngine(<span class="keyword">new</span> <span class="title class_">Engine</span>(<span class="string">&quot;Gasoline&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">drive</span><span class="params">()</span> &#123; System.out.println(<span class="string">&quot;Driving a car...&quot;</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Truck</span> <span class="keyword">extends</span> <span class="title class_">Vehicle</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Truck</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.type = <span class="string">&quot;Truck&quot;</span>;</span><br><span class="line">        setEngine(<span class="keyword">new</span> <span class="title class_">Engine</span>(<span class="string">&quot;Diesel&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">drive</span><span class="params">()</span> &#123; System.out.println(<span class="string">&quot;Driving a truck...&quot;</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5. 原型管理器 (推荐实践)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VehicleCache</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, Vehicle&gt; vehicleMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Vehicle <span class="title function_">getVehicle</span><span class="params">(String vehicleId)</span> &#123;</span><br><span class="line">        <span class="type">Vehicle</span> <span class="variable">cachedVehicle</span> <span class="operator">=</span> vehicleMap.get(vehicleId);</span><br><span class="line">        <span class="comment">// 返回的是原型的一个克隆，而不是原型本身</span></span><br><span class="line">        <span class="keyword">return</span> (Vehicle) cachedVehicle.clone();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 预加载原型到缓存中</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">loadCache</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Car</span> <span class="variable">car</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Car</span>();</span><br><span class="line">        car.setId(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">        vehicleMap.put(car.getId(), car);</span><br><span class="line"></span><br><span class="line">        <span class="type">Truck</span> <span class="variable">truck</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Truck</span>();</span><br><span class="line">        truck.setId(<span class="string">&quot;2&quot;</span>);</span><br><span class="line">        vehicleMap.put(truck.getId(), truck);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 客户端代码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrototypePatternDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        VehicleCache.loadCache();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从缓存中获取克隆对象</span></span><br><span class="line">        <span class="type">Vehicle</span> <span class="variable">clonedCar1</span> <span class="operator">=</span> VehicleCache.getVehicle(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Cloned Vehicle: &quot;</span> + clonedCar1.getType() + <span class="string">&quot;, Engine: &quot;</span> + clonedCar1.getEngine());</span><br><span class="line"></span><br><span class="line">        <span class="type">Vehicle</span> <span class="variable">clonedCar2</span> <span class="operator">=</span> VehicleCache.getVehicle(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Cloned Vehicle: &quot;</span> + clonedCar2.getType() + <span class="string">&quot;, Engine: &quot;</span> + clonedCar2.getEngine());</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;\n--- 证明是不同实例 ---&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;clonedCar1 == clonedCar2 ? &quot;</span> + (clonedCar1 == clonedCar2));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;\n--- 演示深拷贝效果 ---&quot;</span>);</span><br><span class="line">        <span class="comment">// 修改第一个克隆车的引擎类型</span></span><br><span class="line">        clonedCar1.getEngine().setType(<span class="string">&quot;Electric&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;clonedCar1&#x27;s Engine: &quot;</span> + clonedCar1.getEngine());</span><br><span class="line">        System.out.println(<span class="string">&quot;clonedCar2&#x27;s Engine: &quot;</span> + clonedCar2.getEngine());</span><br><span class="line">        System.out.println(<span class="string">&quot;clonedCar1.engine == clonedCar2.engine ? &quot;</span> + (clonedCar1.getEngine() == clonedCar2.getEngine()));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果是浅拷贝，上面的输出会显示clonedCar2的引擎也变成了Electric，并且engine的比较会是true</span></span><br><span class="line">        <span class="comment">// 如果是深拷贝，则不会影响，engine的比较会是false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="五、UML-类图"><a href="#五、UML-类图" class="headerlink" title="五、UML 类图"></a><strong>五、UML 类图</strong></h4><p>下面是上述例子的 PlantUML 代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line">hide empty members</span><br><span class="line"></span><br><span class="line">&#x27; 标记接口</span><br><span class="line">interface Cloneable &lt;&lt;interface&gt;&gt;</span><br><span class="line"></span><br><span class="line">&#x27; 可变成员对象</span><br><span class="line">class Engine implements Cloneable &#123;</span><br><span class="line">  - String type</span><br><span class="line">  + void setType(String type)</span><br><span class="line">  # Object clone()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 抽象原型</span><br><span class="line">abstract class Vehicle implements Cloneable &#123;</span><br><span class="line">  - String id</span><br><span class="line">  # String type</span><br><span class="line">  - Engine engine  &#x27; 引用可变对象</span><br><span class="line">  + &#123;abstract&#125; void drive()</span><br><span class="line">  + Object clone()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 具体原型</span><br><span class="line">class Car extends Vehicle &#123;</span><br><span class="line">  + void drive()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Truck extends Vehicle &#123;</span><br><span class="line">  + void drive()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 原型管理器</span><br><span class="line">class VehicleCache &#123;</span><br><span class="line">  - &#123;static&#125; Map&lt;String, Vehicle&gt; vehicleMap</span><br><span class="line">  + &#123;static&#125; Vehicle getVehicle(String id)</span><br><span class="line">  + &#123;static&#125; void loadCache()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 客户端</span><br><span class="line">class PrototypePatternDemo &#123;</span><br><span class="line">  + &#123;static&#125; void main(String[] args)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 关系</span><br><span class="line">Vehicle o-- &quot;1&quot; Engine</span><br><span class="line">VehicleCache o-- &quot;many&quot; Vehicle : caches &gt;</span><br><span class="line">PrototypePatternDemo ..&gt; VehicleCache : uses</span><br><span class="line">VehicleCache ..&gt; Vehicle : creates via clone</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<p><strong>图示解读：</strong></p>
+<ul>
+<li><code>Vehicle</code> 实现了 <code>Cloneable</code> 接口。</li>
+<li><code>Car</code> 和 <code>Truck</code> 继承自 <code>Vehicle</code>。</li>
+<li><code>Vehicle</code> 包含一个 <code>Engine</code> 对象（聚合关系 <code>o--</code>）。</li>
+<li><code>VehicleCache</code> 缓存了 <code>Vehicle</code> 的原型实例，并根据请求克隆它们。</li>
+</ul>
+<h4 id="六、优缺点分析"><a href="#六、优缺点分析" class="headerlink" title="六、优缺点分析"></a><strong>六、优缺点分析</strong></h4><p><strong>优点 (Pros):</strong></p>
+<ol>
+<li><strong>性能提升</strong>：当创建新对象的代价（时间、资源）很大时，原型模式通过复制来避免这些开销，性能极佳。</li>
+<li><strong>简化创建过程</strong>：客户端无需知道复杂的创建细节，只需调用 <code>clone()</code> 即可。</li>
+<li><strong>增加动态性</strong>：可以在运行时动态地添加或删除原型，从而改变应用的行为。客户端可以克隆一个在运行时才决定的对象。</li>
+<li><strong>减少子类</strong>：与工厂方法模式相比，在某些场景下可以避免创建与产品类平行的工厂类层次结构。</li>
+</ol>
+<p><strong>缺点 (Cons):</strong></p>
+<ol>
+<li><strong>克隆的复杂性</strong>：实现深拷贝可能非常复杂，需要对类中所有的可变引用成员进行递归克隆，容易出错。</li>
+<li><strong>对现有类的改造</strong>：每个需要支持克隆的类都必须实现 <code>Cloneable</code> 接口并重写 <code>clone()</code> 方法，这可能对已有的类层次结构造成侵入。</li>
+<li><strong><code>clone()</code> 方法的约定问题</strong>：Java 中 <code>clone()</code> 的实现机制本身存在一些争议（例如，它与 <code>final</code> 字段的交互不佳），有些开发者（如《Effective Java》作者 Joshua Bloch）建议优先使用拷贝构造函数或静态工厂方法来替代。</li>
+</ol>
+<h4 id="七、在-Java-中的应用"><a href="#七、在-Java-中的应用" class="headerlink" title="七、在 Java 中的应用"></a><strong>七、在 Java 中的应用</strong></h4><ul>
+<li><code>java.util.ArrayList</code> 的 <code>clone()</code> 方法是一个非常典型的<strong>浅拷贝</strong>实现。当你克隆一个 <code>ArrayList</code> 时，新列表和旧列表的容量、大小都一样，但它们内部存储的<strong>对象引用</strong>是相同的。</li>
+<li><code>java.util.Date</code> 和 <code>java.util.Calendar</code> 的 <code>clone()</code> 方法。</li>
+<li>许多框架在需要动态创建和配置对象时，会采用原型模式的思想，即使不直接使用 <code>clone()</code> 方法。</li>
+</ul>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">还在建设中哦，嗯~ o(*￣▽￣*)o</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Rif</h1><div class="author-info__desc">理想偏执狂</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/Roadinforest" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F-Prototype-Pattern"><span class="toc-number">1.</span> <span class="toc-text">设计模式笔记：原型模式 (Prototype Pattern)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC"><span class="toc-number">1.1.</span> <span class="toc-text">一、一句话概括</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83-Why-The-Pain-Point"><span class="toc-number">1.2.</span> <span class="toc-text">二、为什么需要它 (Why - The Pain Point)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%83%E6%98%AF%E4%BB%80%E4%B9%88-What-The-Solution"><span class="toc-number">1.3.</span> <span class="toc-text">三、它是什么 (What - The Solution)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%8E%E4%B9%88%E5%81%9A-How-The-Blueprint"><span class="toc-number">1.4.</span> <span class="toc-text">四、怎么做 (How - The Blueprint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E3%80%81UML-%E7%B1%BB%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">五、UML 类图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">1.6.</span> <span class="toc-text">六、优缺点分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%9C%A8-Java-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">七、在 Java 中的应用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B/" title="创建型-综合案例">创建型-综合案例</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-AbstractFactory/" title="创建型-综合题-AbstractFactory">创建型-综合题-AbstractFactory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Factory/" title="创建型-综合题-Factory">创建型-综合题-Factory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Builder/" title="创建型-综合题-Builder">创建型-综合题-Builder</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Prototype/" title="创建型-综合题-Prototype">创建型-综合题-Prototype</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="Rif" target="_blank">Rif</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 0.88rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 0.88rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 0.88rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 0.88rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 0.88rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="5275233928" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("08/17/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.12",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Rif 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

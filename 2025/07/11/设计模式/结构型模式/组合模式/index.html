@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>组合模式 | Roadinforest的blog</title><meta name="keywords" content="“sports” &quot;badminton&quot;"><meta name="author" content="Rif"><meta name="copyright" content="Rif"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="组合模式"><meta name="application-name" content="组合模式"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="组合模式"><meta property="og:url" content="http://example.com/2025/07/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/index.html"><meta property="og:site_name" content="Roadinforest的blog"><meta property="og:description" content="设计模式笔记：组合模式 (Composite Pattern)一、一句话概括将对象组合成树形结构以表示“部分-整体”的层次结构，并使得客户端能够统一地对待单个对象（叶子）和对象组合（容器）。 二、为什么需要它 (Why - The Pain Point)在很多应用场景中，我们需要处理具有层级结构的数"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="http://example.com/img/default_cover.jpg"><meta property="article:author" content="Rif"><meta property="article:tag" content="“sports” &quot;badminton&quot;"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://example.com/img/default_cover.jpg"><meta name="description" content="设计模式笔记：组合模式 (Composite Pattern)一、一句话概括将对象组合成树形结构以表示“部分-整体”的层次结构，并使得客户端能够统一地对待单个对象（叶子）和对象组合（容器）。 二、为什么需要它 (Why - The Pain Point)在很多应用场景中，我们需要处理具有层级结构的数"><link rel="shortcut icon" href="/img/webIcon/kitty.png"><link rel="canonical" href="http://example.com/2025/07/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: undefined,
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Rif","link":"链接: ","source":"来源: Roadinforest的blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Roadinforest的blog',
+  title: '组合模式',
+  postAI: '',
+  pageFillDescription: '设计模式笔记：组合模式 (Composite Pattern), 一、一句话概括, 二、为什么需要它 (Why - The Pain Point), 三、它是什么 (What - The Solution), 四、怎么做 (How - The Blueprint), 五、UML 类图, 六、优缺点分析, 七、在 Java 中的应用设计模式笔记组合模式一一句话概括将对象组合成树形结构以表示部分整体的层次结构并使得客户端能够统一地对待单个对象叶子和对象组合容器二为什么需要它在很多应用场景中我们需要处理具有层级结构的数据最经典的例子就是文件系统一个目录下既可以包含文件单个对象也可以包含其他目录对象组合而这些子目录又可以继续包含文件和目录形成一个无限嵌套的树形结构痛点如果你不使用组合模式客户端代码在处理这种结构时会变得非常复杂和混乱痛点客户端代码需要区分文件和目录并分别处理处理文件的逻辑处理目录的逻辑必须遍历子节点并对每个子节点再次进行类型判断递归调用但递归的每一步都充满了这种代码的问题显而易见客户端逻辑复杂代码中充斥着判断和类型转换既不美观也容易出错违反开闭原则如果未来我们想增加一种新的节点类型比如符号链接那么就必须修改所有包含判断的客户端代码核心问题如何让客户端代码忽略简单对象和复杂容器对象之间的差异用一种统一的方式来操作整个树形结构三它是什么组合模式通过定义一个共同的抽象完美地解决了这个问题它让叶子节点和容器节点实现同一个接口从而在客户端眼中它们都变成了同一种东西核心思想和角色组件这是一个接口或抽象类为组合中的所有对象包括叶子和容器定义了一个统一的接口它声明了所有节点共有的操作例如等叶子表示树中的基本对象它没有子节点它实现了接口并提供了这些操作的具体实现例如一个对象组合表示树中的容器节点它可以包含子节点这些子节点本身也是它也实现了接口对于接口中的操作它通常会将请求委托给它的子节点去处理并可能对子节点返回的结果进行汇总例如一个对象的就是其所有子节点大小的总和它还提供了管理子节点的方法如关键设计抉择透明性安全性在设计接口时有一个经典的两难选择管理子节点的方法应该放在哪里透明模式将等方法声明在接口中优点客户端完全无需区分叶子和容器可以对任何对象调用方法非常透明缺点不安全叶子节点本身不能有子节点所以它必须为空实现或抛出这在某种程度上违反了里氏替换原则安全模式只在类中声明方法优点类型安全你永远不会对一个叶子对象调用方法缺点不透明客户端必须先判断一个对象是不是类型然后才能调用方法这又回到了的老路在实际应用中透明模式更为常见因为它最大化地简化了客户端代码这也是组合模式的主要目标四怎么做基本步骤以文件系统为例创建抽象类接口声明通用方法如和为了透明性也在这里声明方法可以提供默认的空实现或抛出异常创建类继承实现和方法可以沿用父类的异常实现创建类继承内部持有一个来存储子节点实现方法通过遍历子节点并调用它们的方法来完成实现方法来管理子节点列表客户端通过组合和对象来构建一棵树然后只需对根节点调用即可展示整个文件系统的结构示例代码采用透明模式组件通用操作子节点管理方法透明模式默认实现为抛出异常因为叶子节点不支持这些操作叶子组合内部持有子节点的集合递归地显示子节点目录的大小是所有子节点大小的总和客户端创建树形结构构建层级关系客户端统一操作只需调用根节点的五类图下面是上述例子的代码组合关系包含多个图示解读叶子和组合都继承自组件内部包含一个的集合表示它可以拥有子节点这个关系由一个带星号和菱形的线组合关系表示客户端只与抽象的交互六优缺点分析优点简化客户端代码客户端可以统一地处理所有对象无需关心它是叶子还是容器大大降低了代码的复杂性易于增加新组件增加新的叶子或容器类非常容易只要它们实现了接口即可符合开闭原则结构清晰定义了清晰的部分整体层次结构代码易于理解缺点设计变得过于通用透明模式的代价接口中包含了它所有子类叶子和容器可能用到的方法这使得叶子类会继承到它本不该有的方法如可能需要在运行时抛出异常来处理这在编译时是无法检查的难以限制组合中的组件类型有时候我们希望一个容器里只能放特定类型的叶子组合模式本身不提供这样的约束机制需要额外添加代码来实现七在中的应用框架这是组合模式最经典的教科书级应用是抽象组件等是叶子节点是组合节点都继承自它一个可以包含包括其他的形成复杂的布局你可以对一个调用它会自动让其内部所有组件都可见的组件树也是一个典型的组合模式应用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-07-15 22:01:19',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/webIcon/pet.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Roadinforest的blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 1.05rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 1.05rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 1.05rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 1.05rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 1.05rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">45</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">6</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"></span></div></div><h1 class="post-title" itemprop="name headline">组合模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-07-10T16:00:00.000Z" title="发表于 2025-07-11 00:00:00">2025-07-11</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-07-15T14:01:19.735Z" title="更新于 2025-07-15 22:01:19">2025-07-15</time></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container" itemscope itemtype="http://example.com/2025/07/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/"><header><h1 id="CrawlerTitle" itemprop="name headline">组合模式</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Rif</span><time itemprop="dateCreated datePublished" datetime="2025-07-10T16:00:00.000Z" title="发表于 2025-07-11 00:00:00">2025-07-11</time><time itemprop="dateCreated datePublished" datetime="2025-07-15T14:01:19.735Z" title="更新于 2025-07-15 22:01:19">2025-07-15</time></header><h3 id="设计模式笔记：组合模式-Composite-Pattern"><a href="#设计模式笔记：组合模式-Composite-Pattern" class="headerlink" title="设计模式笔记：组合模式 (Composite Pattern)"></a><strong>设计模式笔记：组合模式 (Composite Pattern)</strong></h3><h4 id="一、一句话概括"><a href="#一、一句话概括" class="headerlink" title="一、一句话概括"></a><strong>一、一句话概括</strong></h4><p>将对象组合成<strong>树形结构</strong>以表示“部分-整体”的层次结构，并使得客户端能够<strong>统一地对待单个对象（叶子）和对象组合（容器）</strong>。</p>
+<h4 id="二、为什么需要它-Why-The-Pain-Point"><a href="#二、为什么需要它-Why-The-Pain-Point" class="headerlink" title="二、为什么需要它 (Why - The Pain Point)"></a><strong>二、为什么需要它 (Why - The Pain Point)</strong></h4><p>在很多应用场景中，我们需要处理具有层级结构的数据。最经典的例子就是文件系统：一个目录下既可以包含文件（单个对象），也可以包含其他目录（对象组合），而这些子目录又可以继续包含文件和目录，形成一个无限嵌套的树形结构。</p>
+<p><strong>痛点：</strong></p>
+<p>如果你不使用组合模式，客户端代码在处理这种结构时会变得非常复杂和混乱。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 痛点：客户端代码需要区分文件和目录，并分别处理</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">(Object node)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (node <span class="keyword">instanceof</span> File) &#123;</span><br><span class="line">        <span class="comment">// 处理文件的逻辑</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> (File) node;</span><br><span class="line">        System.out.println(<span class="string">&quot;File: &quot;</span> + file.getName());</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node <span class="keyword">instanceof</span> Directory) &#123;</span><br><span class="line">        <span class="comment">// 处理目录的逻辑</span></span><br><span class="line">        <span class="type">Directory</span> <span class="variable">dir</span> <span class="operator">=</span> (Directory) node;</span><br><span class="line">        System.out.println(<span class="string">&quot;Directory: &quot;</span> + dir.getName());</span><br><span class="line">        <span class="comment">// 必须遍历子节点，并对每个子节点再次进行类型判断</span></span><br><span class="line">        <span class="keyword">for</span> (Object child : dir.getChildren()) &#123;</span><br><span class="line">            display(child); <span class="comment">// 递归调用，但递归的每一步都充满了if-else</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种代码的问题显而易见：</p>
+<ol>
+<li><strong>客户端逻辑复杂</strong>：代码中充斥着 <code>instanceof</code> 判断和类型转换，既不美观也容易出错。</li>
+<li><strong>违反开闭原则</strong>：如果未来我们想增加一种新的节点类型，比如“符号链接（Symbolic Link）”，那么就必须修改所有包含 <code>if-else</code> 判断的客户端代码。</li>
+</ol>
+<p><strong>核心问题</strong>：如何让客户端代码忽略“简单对象”和“复杂容器对象”之间的差异，用一种统一的方式来操作整个树形结构？</p>
+<h4 id="三、它是什么-What-The-Solution"><a href="#三、它是什么-What-The-Solution" class="headerlink" title="三、它是什么 (What - The Solution)"></a><strong>三、它是什么 (What - The Solution)</strong></h4><p>组合模式通过定义一个共同的抽象，完美地解决了这个问题。它让“叶子节点”和“容器节点”实现同一个接口，从而在客户端眼中，它们都变成了同一种东西。</p>
+<p><strong>核心思想和角色：</strong></p>
+<ol>
+<li>**组件 (Component)**：<ul>
+<li>这是一个接口或抽象类，为组合中的所有对象（包括叶子和容器）定义了一个统一的接口。</li>
+<li>它声明了所有节点共有的操作，例如 <code>display()</code>, <code>getSize()</code> 等。</li>
+</ul>
+</li>
+<li>**叶子 (Leaf)**：<ul>
+<li>表示树中的基本对象，它<strong>没有子节点</strong>。</li>
+<li>它实现了 <code>Component</code> 接口，并提供了这些操作的具体实现。例如，一个 <code>File</code> 对象。</li>
+</ul>
+</li>
+<li>**组合 (Composite)**：<ul>
+<li>表示树中的容器节点，它<strong>可以包含子节点</strong>（这些子节点本身也是 <code>Component</code>）。</li>
+<li>它也实现了 <code>Component</code> 接口。对于接口中的操作，它通常会将请求<strong>委托</strong>给它的子节点去处理，并可能对子节点返回的结果进行汇总。例如，一个 <code>Directory</code> 对象的 <code>getSize()</code> 就是其所有子节点大小的总和。</li>
+<li>它还提供了管理子节点的方法，如 <code>add()</code>, <code>remove()</code>, <code>getChild()</code>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>关键设计抉择：透明性 vs. 安全性</strong></p>
+<p>在设计 <code>Component</code> 接口时，有一个经典的两难选择：<strong>管理子节点的方法（<code>add</code>, <code>remove</code>）应该放在哪里？</strong></p>
+<ul>
+<li>**透明模式 (Transparency)**：将 <code>add/remove</code> 等方法声明在 <code>Component</code> 接口中。<ul>
+<li><strong>优点</strong>：客户端完全无需区分叶子和容器，可以对任何 <code>Component</code> 对象调用 <code>add</code> 方法，非常“透明”。</li>
+<li><strong>缺点</strong>：不“安全”。叶子节点本身不能有子节点，所以它必须为空实现或抛出 <code>UnsupportedOperationException</code>。这在某种程度上违反了里氏替换原则。</li>
+</ul>
+</li>
+<li>**安全模式 (Safety)**：只在 <code>Composite</code> 类中声明 <code>add/remove</code> 方法。<ul>
+<li><strong>优点</strong>：类型安全。你永远不会对一个叶子对象调用 <code>add</code> 方法。</li>
+<li><strong>缺点</strong>：不“透明”。客户端必须先判断一个对象是不是 <code>Composite</code> 类型，然后才能调用 <code>add</code> 方法，这又回到了 <code>instanceof</code> 的老路。</li>
+</ul>
+</li>
+</ul>
+<p>在实际应用中，<strong>透明模式更为常见</strong>，因为它最大化地简化了客户端代码，这也是组合模式的主要目标。</p>
+<h4 id="四、怎么做-How-The-Blueprint"><a href="#四、怎么做-How-The-Blueprint" class="headerlink" title="四、怎么做 (How - The Blueprint)"></a><strong>四、怎么做 (How - The Blueprint)</strong></h4><p><strong>基本步骤（以文件系统为例）：</strong></p>
+<ol>
+<li>创建 <code>Component</code> 抽象类&#x2F;接口 <code>FileSystemComponent</code>，声明通用方法如 <code>display()</code> 和 <code>getSize()</code>。为了透明性，也在这里声明 <code>add</code>&#x2F;<code>remove</code> 方法（可以提供默认的空实现或抛出异常）。</li>
+<li>创建 <code>Leaf</code> 类 <code>FileNode</code>，继承 <code>FileSystemComponent</code>。实现 <code>display</code> 和 <code>getSize</code>。<code>add</code>&#x2F;<code>remove</code> 方法可以沿用父类的异常实现。</li>
+<li>创建 <code>Composite</code> 类 <code>DirectoryNode</code>，继承 <code>FileSystemComponent</code>。<ul>
+<li>内部持有一个 <code>List&lt;FileSystemComponent&gt;</code> 来存储子节点。</li>
+<li>实现 <code>display</code> 方法，通过遍历子节点并调用它们的 <code>display</code> 方法来完成。</li>
+<li>实现 <code>add</code>&#x2F;<code>remove</code> 方法来管理子节点列表。</li>
+</ul>
+</li>
+<li>客户端通过组合 <code>FileNode</code> 和 <code>DirectoryNode</code> 对象来构建一棵树，然后只需对根节点调用 <code>display()</code> 即可展示整个文件系统的结构。</li>
+</ol>
+<p><strong>Java 示例代码 (采用透明模式)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 组件 (Component)</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">FileSystemComponent</span> &#123;</span><br><span class="line">    <span class="keyword">protected</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FileSystemComponent</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通用操作</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">(String indent)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">long</span> <span class="title function_">getSize</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 子节点管理方法（透明模式）</span></span><br><span class="line">    <span class="comment">// 默认实现为抛出异常，因为叶子节点不支持这些操作</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(FileSystemComponent component)</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UnsupportedOperationException</span>(<span class="string">&quot;Cannot add to a file.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(FileSystemComponent component)</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UnsupportedOperationException</span>(<span class="string">&quot;Cannot remove from a file.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 叶子 (Leaf)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileNode</span> <span class="keyword">extends</span> <span class="title class_">FileSystemComponent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FileNode</span><span class="params">(String name, <span class="type">long</span> size)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">        <span class="built_in">this</span>.size = size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">(String indent)</span> &#123;</span><br><span class="line">        System.out.println(indent + <span class="string">&quot;- &quot;</span> + getName() + <span class="string">&quot; (&quot;</span> + getSize() + <span class="string">&quot; bytes)&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getSize</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 组合 (Composite)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DirectoryNode</span> <span class="keyword">extends</span> <span class="title class_">FileSystemComponent</span> &#123;</span><br><span class="line">    <span class="comment">// 内部持有子节点的集合</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;FileSystemComponent&gt; children = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DirectoryNode</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(FileSystemComponent component)</span> &#123;</span><br><span class="line">        children.add(component);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(FileSystemComponent component)</span> &#123;</span><br><span class="line">        children.remove(component);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">(String indent)</span> &#123;</span><br><span class="line">        System.out.println(indent + <span class="string">&quot;+ &quot;</span> + getName());</span><br><span class="line">        <span class="comment">// 递归地显示子节点</span></span><br><span class="line">        <span class="keyword">for</span> (FileSystemComponent component : children) &#123;</span><br><span class="line">            component.display(indent + <span class="string">&quot;  &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getSize</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 目录的大小是所有子节点大小的总和</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">totalSize</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (FileSystemComponent component : children) &#123;</span><br><span class="line">            totalSize += component.getSize();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> totalSize;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 客户端</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompositePatternDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建树形结构</span></span><br><span class="line">        <span class="type">DirectoryNode</span> <span class="variable">root</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DirectoryNode</span>(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        <span class="type">DirectoryNode</span> <span class="variable">documents</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DirectoryNode</span>(<span class="string">&quot;documents&quot;</span>);</span><br><span class="line">        <span class="type">DirectoryNode</span> <span class="variable">pictures</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DirectoryNode</span>(<span class="string">&quot;pictures&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">FileNode</span> <span class="variable">resume</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileNode</span>(<span class="string">&quot;resume.docx&quot;</span>, <span class="number">1024</span>);</span><br><span class="line">        <span class="type">FileNode</span> <span class="variable">photo1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileNode</span>(<span class="string">&quot;photo1.jpg&quot;</span>, <span class="number">2048</span>);</span><br><span class="line">        <span class="type">FileNode</span> <span class="variable">photo2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileNode</span>(<span class="string">&quot;photo2.png&quot;</span>, <span class="number">4096</span>);</span><br><span class="line">        <span class="type">DirectoryNode</span> <span class="variable">project</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DirectoryNode</span>(<span class="string">&quot;project&quot;</span>);</span><br><span class="line">        <span class="type">FileNode</span> <span class="variable">code</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileNode</span>(<span class="string">&quot;main.java&quot;</span>, <span class="number">512</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建层级关系</span></span><br><span class="line">        root.add(documents);</span><br><span class="line">        root.add(pictures);</span><br><span class="line"></span><br><span class="line">        documents.add(resume);</span><br><span class="line">        documents.add(project);</span><br><span class="line">        project.add(code);</span><br><span class="line"></span><br><span class="line">        pictures.add(photo1);</span><br><span class="line">        pictures.add(photo2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 客户端统一操作，只需调用根节点的 display</span></span><br><span class="line">        System.out.println(<span class="string">&quot;--- Displaying File System Structure ---&quot;</span>);</span><br><span class="line">        root.display(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;\n--- Calculating Sizes ---&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Size of &#x27;documents&#x27; directory: &quot;</span> + documents.getSize() + <span class="string">&quot; bytes&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Total size of &#x27;root&#x27; directory: &quot;</span> + root.getSize() + <span class="string">&quot; bytes&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="五、UML-类图"><a href="#五、UML-类图" class="headerlink" title="五、UML 类图"></a><strong>五、UML 类图</strong></h4><p>下面是上述例子的 PlantUML 代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line">hide empty members</span><br><span class="line"></span><br><span class="line">abstract class FileSystemComponent &#123;</span><br><span class="line">  # String name</span><br><span class="line">  + &#123;abstract&#125; void display(String indent)</span><br><span class="line">  + &#123;abstract&#125; long getSize()</span><br><span class="line">  + void add(FileSystemComponent c)</span><br><span class="line">  + void remove(FileSystemComponent c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileNode extends FileSystemComponent &#123;</span><br><span class="line">  - long size</span><br><span class="line">  + void display(String indent)</span><br><span class="line">  + long getSize()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DirectoryNode extends FileSystemComponent &#123;</span><br><span class="line">  - List&lt;FileSystemComponent&gt; children</span><br><span class="line">  + void display(String indent)</span><br><span class="line">  + long getSize()</span><br><span class="line">  + void add(FileSystemComponent c)</span><br><span class="line">  + void remove(FileSystemComponent c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27; 组合关系：DirectoryNode 包含多个 FileSystemComponent</span><br><span class="line">DirectoryNode *-- &quot;0..*&quot; FileSystemComponent</span><br><span class="line"></span><br><span class="line">class CompositePatternDemo &#123;</span><br><span class="line">  + &#123;static&#125; void main(String[] args)</span><br><span class="line">&#125;</span><br><span class="line">CompositePatternDemo ..&gt; FileSystemComponent : uses</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<p><strong>图示解读：</strong></p>
+<ul>
+<li><code>FileNode</code> (叶子) 和 <code>DirectoryNode</code> (组合) 都继承自 <code>FileSystemComponent</code> (组件)。</li>
+<li><code>DirectoryNode</code> 内部包含一个 <code>FileSystemComponent</code> 的集合，表示它可以拥有子节点。这个关系由一个带星号和菱形的线（组合关系 <code>*--</code>）表示。</li>
+<li>客户端 <code>CompositePatternDemo</code> 只与抽象的 <code>FileSystemComponent</code> 交互。</li>
+</ul>
+<h4 id="六、优缺点分析"><a href="#六、优缺点分析" class="headerlink" title="六、优缺点分析"></a><strong>六、优缺点分析</strong></h4><p><strong>优点 (Pros):</strong></p>
+<ol>
+<li><strong>简化客户端代码</strong>：客户端可以统一地处理所有对象，无需关心它是叶子还是容器，大大降低了代码的复杂性。</li>
+<li><strong>易于增加新组件</strong>：增加新的叶子或容器类非常容易，只要它们实现了 <code>Component</code> 接口即可，符合开闭原则。</li>
+<li><strong>结构清晰</strong>：定义了清晰的“部分-整体”层次结构，代码易于理解。</li>
+</ol>
+<p><strong>缺点 (Cons):</strong></p>
+<ol>
+<li><strong>设计变得过于通用（透明模式的代价）</strong>：<code>Component</code> 接口中包含了它所有子类（叶子和容器）可能用到的方法。这使得叶子类会继承到它本不该有的方法（如<code>add</code>&#x2F;<code>remove</code>），可能需要在运行时抛出异常来处理，这在编译时是无法检查的。</li>
+<li><strong>难以限制组合中的组件类型</strong>：有时候我们希望一个容器里只能放特定类型的叶子，组合模式本身不提供这样的约束机制，需要额外添加代码来实现。</li>
+</ol>
+<h4 id="七、在-Java-中的应用"><a href="#七、在-Java-中的应用" class="headerlink" title="七、在 Java 中的应用"></a><strong>七、在 Java 中的应用</strong></h4><ul>
+<li><strong>Java AWT&#x2F;Swing GUI 框架</strong>: 这是组合模式最经典的教科书级应用。<ul>
+<li><code>java.awt.Component</code> 是抽象组件。</li>
+<li><code>JButton</code>, <code>JTextField</code> 等是叶子节点。</li>
+<li><code>java.awt.Container</code> 是组合节点（<code>JPanel</code>, <code>JFrame</code> 都继承自它）。一个 <code>Container</code> 可以包含 <code>Component</code>（包括其他的 <code>Container</code>），形成复杂的 GUI 布局。你可以对一个 <code>JPanel</code> 调用 <code>setVisible(true)</code>，它会自动让其内部所有组件都可见。</li>
+</ul>
+</li>
+<li>**JavaServer Faces (JSF)**：JSF 的 UI 组件树也是一个典型的组合模式应用。</li>
+</ul>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">还在建设中哦，嗯~ o(*￣▽￣*)o</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Rif</h1><div class="author-info__desc">理想偏执狂</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/Roadinforest" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AC%94%E8%AE%B0%EF%BC%9A%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F-Composite-Pattern"><span class="toc-number">1.</span> <span class="toc-text">设计模式笔记：组合模式 (Composite Pattern)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC"><span class="toc-number">1.1.</span> <span class="toc-text">一、一句话概括</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83-Why-The-Pain-Point"><span class="toc-number">1.2.</span> <span class="toc-text">二、为什么需要它 (Why - The Pain Point)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%83%E6%98%AF%E4%BB%80%E4%B9%88-What-The-Solution"><span class="toc-number">1.3.</span> <span class="toc-text">三、它是什么 (What - The Solution)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%8E%E4%B9%88%E5%81%9A-How-The-Blueprint"><span class="toc-number">1.4.</span> <span class="toc-text">四、怎么做 (How - The Blueprint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E3%80%81UML-%E7%B1%BB%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">五、UML 类图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">1.6.</span> <span class="toc-text">六、优缺点分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%9C%A8-Java-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">七、在 Java 中的应用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B/" title="创建型-综合案例">创建型-综合案例</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-AbstractFactory/" title="创建型-综合题-AbstractFactory">创建型-综合题-AbstractFactory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Factory/" title="创建型-综合题-Factory">创建型-综合题-Factory</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Builder/" title="创建型-综合题-Builder">创建型-综合题-Builder</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E7%BB%83%E4%B9%A0/%E5%88%9B%E5%BB%BA%E5%9E%8B-%E7%BB%BC%E5%90%88%E9%A2%98-Prototype/" title="创建型-综合题-Prototype">创建型-综合题-Prototype</a><time datetime="2025-07-23T16:00:00.000Z" title="发表于 2025-07-24 00:00:00">2025-07-24</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="Rif" target="_blank">Rif</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">0</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 0.88rem;">Docker<sup>1</sup></a><a href="/tags/GLFW/" style="font-size: 0.88rem;">GLFW<sup>2</sup></a><a href="/tags/OpenGL/" style="font-size: 0.88rem;">OpenGL<sup>19</sup></a><a href="/tags/Shader/" style="font-size: 0.88rem;">Shader<sup>1</sup></a><a href="/tags/root/" style="font-size: 0.88rem;">root<sup>1</sup></a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">设计模式<sup>20</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="5275233928" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("08/17/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.12",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Rif 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
